@@ -15,11 +15,24 @@ export class AppComponent implements OnInit {
   viewportHeightWithoutScrollBar = 0;
 
   itemVisibilityPercentage = 0;
+  percentageFromIntersectionObserver = 0;
 
   ngOnInit() {
     this.getObservedItemPosition();
     this.getViewPortHeight();
     this.calculateItemVisibilityPercentage(0);
+    this.connectIntersectionObserver();
+  }
+
+  private connectIntersectionObserver() {
+    const callback = entries => this.percentageFromIntersectionObserver = Math.floor(100 * entries[0].intersectionRatio);
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: [0, 1.0]
+    }
+    const intersectionObserver = new IntersectionObserver(callback, options);
+    intersectionObserver.observe(document.getElementById('observed'));
   }
 
   private getObservedItemPosition() {
