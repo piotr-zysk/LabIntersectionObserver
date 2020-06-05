@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Subscription, fromEvent } from 'rxjs';
 
 @Component({
@@ -7,6 +7,8 @@ import { Subscription, fromEvent } from 'rxjs';
   styleUrls: ['./scroll-observer.component.css']
 })
 export class ScrollObserverComponent implements OnInit, OnDestroy {
+
+  @Output() newScrollTop = new EventEmitter<number>();
 
   constructor() { }
 
@@ -25,6 +27,7 @@ export class ScrollObserverComponent implements OnInit, OnDestroy {
     const scrollObservable = fromEvent(document, 'scroll');
     const subscription = scrollObservable.subscribe(() => {
       this.scrollPosition = document.documentElement.scrollTop;
+      this.newScrollTop.emit(this.scrollPosition);
     });
   }
 }
