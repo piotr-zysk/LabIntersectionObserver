@@ -1,12 +1,14 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { ScrollObserverComponent } from './components/scroll-observer/scroll-observer.component';
+import { Subscription } from 'rxjs';
+import { map, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   title = 'LabIntersectionObserver';
 
   observedItemOffsetHeight = 0;
@@ -17,6 +19,8 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   itemVisibilityPercentage = 0;
   percentageFromIntersectionObserver = 0;
+
+  scrollSubscription: Subscription;
 
   @ViewChild('scrollObserver') scrollObserver: ScrollObserverComponent;
 
@@ -31,6 +35,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.connectScrollObserver();
   }
 
+  ngOnDestroy() {
+    this.scrollSubscription?.unsubscribe();
+  }
+
   private connectIntersectionObserver() {
     const callback = entries => this.percentageFromIntersectionObserver = Math.floor(100 * entries[0].intersectionRatio);
     const options = {
@@ -43,9 +51,12 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   private connectScrollObserver() {
-    this.scrollObserver.newScrollTop.subscribe(
+    this.scrollSubscription = this.scrollObserver.newScrollTop.pipe(
+      map(scrollTop => this.isItemVisible(scrollTop)),
+      distinctUntilChanged()
+    ).subscribe(
       scrollTop => {
-        this.calculateItemVisibilityPercentage(scrollTop);
+        this.calculateItemVisibilityPercentage(document.documentElement.scrollTop);
       });
   }
 
@@ -58,6 +69,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   private getViewPortHeight() {
     this.viewportHeightWithScrollBar = window.innerHeight;
     this.viewportHeightWithoutScrollBar = document.documentElement.clientHeight;
+  }
+
+  private isItemVisible(scrollTop: number): boolean {
+    return Math.floor(this.observedItemOffsetHeight - this.getTopCut(scrollTop) - this.getBottomCut(scrollTop)) > 0;
   }
 
   private calculateItemVisibilityPercentage(scrollTop: number) {
