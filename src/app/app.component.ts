@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { ScrollObserverComponent } from './components/scroll-observer/scroll-observer.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   title = 'LabIntersectionObserver';
 
   observedItemOffsetHeight = 0;
@@ -17,11 +18,17 @@ export class AppComponent implements OnInit {
   itemVisibilityPercentage = 0;
   percentageFromIntersectionObserver = 0;
 
+  @ViewChild('scrollObserver') scrollObserver: ScrollObserverComponent;
+
   ngOnInit() {
     this.getObservedItemPosition();
     this.getViewPortHeight();
     this.calculateItemVisibilityPercentage(0);
     this.connectIntersectionObserver();
+  }
+
+  ngAfterViewInit() {
+    this.connectScrollObserver();
   }
 
   private connectIntersectionObserver() {
@@ -30,9 +37,16 @@ export class AppComponent implements OnInit {
       root: null,
       rootMargin: '0px',
       threshold: [0, 1.0]
-    }
+    };
     const intersectionObserver = new IntersectionObserver(callback, options);
     intersectionObserver.observe(document.getElementById('observed'));
+  }
+
+  private connectScrollObserver() {
+    this.scrollObserver.newScrollTop.subscribe(
+      scrollTop => {
+        this.calculateItemVisibilityPercentage(scrollTop);
+      });
   }
 
   private getObservedItemPosition() {
@@ -44,10 +58,6 @@ export class AppComponent implements OnInit {
   private getViewPortHeight() {
     this.viewportHeightWithScrollBar = window.innerHeight;
     this.viewportHeightWithoutScrollBar = document.documentElement.clientHeight;
-  }
-
-  onScroll(scrollTop: number) {
-    this.calculateItemVisibilityPercentage(scrollTop);
   }
 
   private calculateItemVisibilityPercentage(scrollTop: number) {

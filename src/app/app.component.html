@@ -92,7 +92,7 @@
 </div>
 
 <div id='board'>
-  scroll position: <app-scroll-observer (newScrollTop)='onScroll($event)'></app-scroll-observer>px
+  scroll position: <app-scroll-observer #scrollObserver></app-scroll-observer>px
   <br>
   observed item visibility: {{itemVisibilityPercentage}}%
   <br>
