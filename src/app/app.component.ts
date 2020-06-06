@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { ScrollObserverComponent } from './components/scroll-observer/scroll-observer.component';
-import { Subscription } from 'rxjs';
+import { Subscription, pipe, OperatorFunction, Observable } from 'rxjs';
 import { map, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
@@ -52,13 +52,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private connectScrollObserver() {
     this.scrollSubscription = this.scrollObserver.newScrollTop.pipe(
-      map(scrollTop => this.isItemVisible(scrollTop)),
-      distinctUntilChanged()
+      this.notifyWhenShowOrHide()
     ).subscribe(
       scrollTop => {
         this.calculateItemVisibilityPercentage(document.documentElement.scrollTop);
       });
   }
+
+  private notifyWhenShowOrHide = () => pipe(
+      map((x: number) => this.isItemVisible(x)),
+      distinctUntilChanged()
+    )
 
   private getObservedItemPosition() {
     const item = document.getElementById('observed');
