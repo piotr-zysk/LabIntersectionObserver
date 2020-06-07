@@ -1,16 +1,13 @@
-import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
-import { ScrollObserverComponent } from './scroll-observer/scroll-observer.component';
-import { Subscription, pipe, OperatorFunction, Observable } from 'rxjs';
-import { map, distinctUntilChanged } from 'rxjs/operators';
-import { ScrollObserverService } from './scroll-observer/scroll-observer.service';
-import { ScrollIntersectionVM } from './scroll-observer/model/scroll-intersection-VM';
+import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { ScrollIntersectionVM } from 'pz-scroll-observer';
 
 @Component({
-  selector: 'pz-root',
+  selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AppComponent implements OnInit {
   title = 'LabIntersectionObserver';
 
   observedItemVisibility: string;
@@ -19,21 +16,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   scrollSubscription: Subscription;
   scrollSubscriptionVerbose: Subscription;
 
-  @ViewChild('scrollObserver') scrollObserver: ScrollObserverComponent;
-
-  constructor(private scrollObserverService: ScrollObserverService) { }
+  constructor() { }
 
   ngOnInit() {
     this.connectIntersectionObserver();
-  }
-
-  ngAfterViewInit() {
-    // this.connectScrollObserver();
-  }
-
-  ngOnDestroy() {
-    // this.scrollSubscription?.unsubscribe();
-    // this.scrollSubscriptionVerbose?.unsubscribe();
   }
 
   onScroll(itemVisible: boolean) {
@@ -55,15 +41,4 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     intersectionObserver.observe(document.getElementById('observed'));
   }
 
-  private connectScrollObserver() {
-    // this.scrollSubscription = this.scrollObserverService.visible$(document.getElementById('observed')).subscribe(
-    //   visible => {
-    //     this.observedItemVisibility = visible ? 'visible' : 'hidden';
-    //   });
-
-    // this.scrollSubscriptionVerbose = this.scrollObserverService.scrollIntersection$(document.getElementById('lorem1')).subscribe(
-    //   data => {
-    //     console.log(data);
-    //   });
-  }
 }

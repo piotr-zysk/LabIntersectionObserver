@@ -1,16 +1,17 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { Subscription, fromEvent } from 'rxjs';
-import { ScrollObserverService } from './scroll-observer.service';
+import { Subscription } from 'rxjs';
+import { PzScrollObserverService } from './pz-scroll-observer.service';
 
 @Component({
   selector: 'pz-scroll-observer',
-  templateUrl: './scroll-observer.component.html'
+  template: `{{scrollPosition}}`
 })
-export class ScrollObserverComponent implements OnInit, OnDestroy {
+
+export class PzScrollObserverComponent implements OnInit, OnDestroy {
 
   @Output() newScrollTop = new EventEmitter<number>();
 
-  constructor(private scrollObserverService: ScrollObserverService) { }
+  constructor(private scrollObserverService: PzScrollObserverService) { }
 
   scrollPosition = 0;
   private subscription: Subscription;

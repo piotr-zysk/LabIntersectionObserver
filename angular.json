@@ -119,6 +119,46 @@
           }
         }
       }
+    },
+    "pz-scroll-observer": {
+      "projectType": "library",
+      "root": "projects/pz-scroll-observer",
+      "sourceRoot": "projects/pz-scroll-observer/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/pz-scroll-observer/tsconfig.lib.json",
+            "project": "projects/pz-scroll-observer/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/pz-scroll-observer/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/pz-scroll-observer/src/test.ts",
+            "tsConfig": "projects/pz-scroll-observer/tsconfig.spec.json",
+            "karmaConfig": "projects/pz-scroll-observer/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/pz-scroll-observer/tsconfig.lib.json",
+              "projects/pz-scroll-observer/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }},
   "defaultProject": "LabIntersectionObserver"
 }

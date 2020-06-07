@@ -1,4 +1,4 @@
-import { Injectable, ElementRef } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { fromEvent, pipe } from 'rxjs';
 import { map, distinctUntilChanged } from 'rxjs/operators';
 import { ScrollIntersectionVM } from './model/scroll-intersection-VM';
@@ -6,7 +6,7 @@ import { ScrollIntersectionVM } from './model/scroll-intersection-VM';
 @Injectable({
   providedIn: 'root'
 })
-export class ScrollObserverService {
+export class PzScrollObserverService {
 
   constructor() { }
 
