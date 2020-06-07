@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
-import { ScrollObserverComponent } from './components/scroll-observer/scroll-observer.component';
+import { ScrollObserverComponent } from './scroll-observer/scroll-observer.component';
 import { Subscription, pipe, OperatorFunction, Observable } from 'rxjs';
 import { map, distinctUntilChanged } from 'rxjs/operators';
 
