@@ -4,4 +4,7 @@ export class ScrollIntersectionVM {
     bottomCutPercent: number;
     visible: boolean;
     fullyVisible: boolean;
+    elementHeightPx: number;
+    elementOffsetPx: number;
+    elementViewportOffsetPx: number;
 }

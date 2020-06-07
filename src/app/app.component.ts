@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular
 import { ScrollObserverComponent } from './scroll-observer/scroll-observer.component';
 import { Subscription, pipe, OperatorFunction, Observable } from 'rxjs';
 import { map, distinctUntilChanged } from 'rxjs/operators';
+import { ScrollObserverService } from './scroll-observer/scroll-observer.service';
 
 @Component({
   selector: 'app-root',
@@ -11,23 +12,16 @@ import { map, distinctUntilChanged } from 'rxjs/operators';
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   title = 'LabIntersectionObserver';
 
-  observedItemOffsetHeight = 0;
-  observedItemOffsetTop = 0;
-
-  viewportHeightWithScrollBar = 0;
-  viewportHeightWithoutScrollBar = 0;
-
-  itemVisibilityPercentage = 0;
+  observedItemVisibility: string;
   percentageFromIntersectionObserver = 0;
 
   scrollSubscription: Subscription;
 
   @ViewChild('scrollObserver') scrollObserver: ScrollObserverComponent;
 
+  constructor(private scrollObserverService: ScrollObserverService) { }
+
   ngOnInit() {
-    this.getObservedItemPosition();
-    this.getViewPortHeight();
-    this.calculateItemVisibilityPercentage(0);
     this.connectIntersectionObserver();
   }
 
@@ -51,54 +45,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private connectScrollObserver() {
-    this.scrollSubscription = this.scrollObserver.newScrollTop.pipe(
-      this.notifyWhenShowOrHide()
-    ).subscribe(
-      scrollTop => {
-        this.calculateItemVisibilityPercentage(document.documentElement.scrollTop);
+    this.scrollSubscription = this.scrollObserverService.visible$('observed').subscribe(
+      visible => {
+        this.observedItemVisibility = visible ? 'visible' : 'hidden';
       });
-  }
-
-  private notifyWhenShowOrHide = () => pipe(
-      map((x: number) => this.isItemVisible(x)),
-      distinctUntilChanged()
-    )
-
-  private getObservedItemPosition() {
-    const item = document.getElementById('observed');
-    this.observedItemOffsetHeight = item.offsetHeight;
-    this.observedItemOffsetTop = item.offsetTop;
-  }
-
-  private getViewPortHeight() {
-    this.viewportHeightWithScrollBar = window.innerHeight;
-    this.viewportHeightWithoutScrollBar = document.documentElement.clientHeight;
-  }
-
-  private isItemVisible(scrollTop: number): boolean {
-    return Math.floor(this.observedItemOffsetHeight - this.getTopCut(scrollTop) - this.getBottomCut(scrollTop)) > 0;
-  }
-
-  private calculateItemVisibilityPercentage(scrollTop: number) {
-    this.itemVisibilityPercentage = Math.floor(100 *
-      (this.observedItemOffsetHeight - this.getTopCut(scrollTop) - this.getBottomCut(scrollTop)) / this.observedItemOffsetHeight);
-  }
-
-  private getTopCut(scrollTop: number) {
-    let topCut = scrollTop - this.observedItemOffsetTop;
-    if (topCut < 0)
-      topCut = 0;
-    if (topCut > this.observedItemOffsetHeight)
-      topCut = this.observedItemOffsetHeight;
-    return topCut;
-  }
-
-  private getBottomCut(scrollTop: number) {
-    let bottomCut = (this.observedItemOffsetTop + this.observedItemOffsetHeight) - (scrollTop + this.viewportHeightWithoutScrollBar);
-    if (bottomCut < 0)
-      bottomCut = 0;
-    if (bottomCut > this.observedItemOffsetHeight)
-      bottomCut = this.observedItemOffsetHeight;
-    return bottomCut;
   }
 }
