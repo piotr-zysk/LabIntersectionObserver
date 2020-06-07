@@ -47,12 +47,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private connectScrollObserver() {
-    this.scrollSubscription = this.scrollObserverService.visible$('observed').subscribe(
+    this.scrollSubscription = this.scrollObserverService.visible$(document.getElementById('observed')).subscribe(
       visible => {
         this.observedItemVisibility = visible ? 'visible' : 'hidden';
       });
 
-    this.scrollSubscriptionVerbose = this.scrollObserverService.scrollIntersection$('lorem1').subscribe(
+    this.scrollSubscriptionVerbose = this.scrollObserverService.scrollIntersection$(document.getElementById('lorem1')).subscribe(
       data => {
         console.log(data);
       });

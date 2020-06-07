@@ -16,68 +16,64 @@ export class ScrollObserverService {
     );
   }
 
-  visible$(elementId: string) {
+  visible$(el: HTMLElement) {
     return this.scroll$().pipe(
-      this.notifyWhenShowOrHide(elementId)
+      this.notifyWhenShowOrHide(el)
     );
   }
 
-  scrollIntersection$(elementId: string) {
+  scrollIntersection$(el: HTMLElement) {
     return this.scroll$().pipe(
-      map(scrollTop => this.calculateScrollIntesectionVM(elementId, scrollTop))
+      map(scrollTop => this.calculateScrollIntesectionVM(scrollTop, el))
     );
   }
 
-  private calculateScrollIntesectionVM(elementId: string, scrollTop: number): ScrollIntersectionVM {
-    const itemHeight = this.getItemHeight(elementId);
-    const itemVisibilityPercent = this.getItemVisibilityPercent(elementId, scrollTop);
+  private calculateScrollIntesectionVM(scrollTop: number, el: HTMLElement): ScrollIntersectionVM {
+    const itemHeight = this.getItemHeight(el);
+    const itemVisibilityPercent = this.getItemVisibilityPercent(scrollTop, el);
     return {
       scrollTopPercent: scrollTop,
-      topCutPercent: Math.floor(100 * this.getTopCut(elementId, scrollTop) / itemHeight),
-      bottomCutPercent: Math.floor(100 * this.getBottomCut(elementId, scrollTop) / itemHeight),
+      topCutPercent: Math.floor(100 * this.getTopCut(scrollTop, el) / itemHeight),
+      bottomCutPercent: Math.floor(100 * this.getBottomCut(scrollTop, el) / itemHeight),
       visibilityPercent: itemVisibilityPercent,
       visible: itemVisibilityPercent > 0,
       fullyVisible: itemVisibilityPercent === 100,
       elementHeightPx: itemHeight,
-      elementOffsetPx: this.getItemOffsetTop(elementId),
+      elementOffsetPx: this.getItemOffsetTop(el),
       elementViewportOffsetPx: this.getViewportHeight()
     } as ScrollIntersectionVM;
   }
 
-  private notifyWhenShowOrHide = (elementId: string) => pipe(
-    map((x: number) => this.isItemVisible(elementId, x)),
+  private notifyWhenShowOrHide = (el: HTMLElement) => pipe(
+    map((x: number) => this.isItemVisible(x, el)),
     distinctUntilChanged()
   )
 
-  private getItemOffsetTop(elementId: string): number {
-    return this.getElementById(elementId).offsetTop;
+  private getItemOffsetTop(el: HTMLElement): number {
+    return el.offsetTop;
   }
 
-  private getItemHeight(elementId: string): number {
-    return this.getElementById(elementId).offsetHeight;
+  private getItemHeight(el: HTMLElement): number {
+    return el.offsetHeight;
   }
 
   private getViewportHeight(): number {
     return document.documentElement.clientHeight;
   }
 
-  private getElementById(elementId: string): HTMLElement {
-    return document.getElementById(elementId);
+  private isItemVisible(scrollTop: number, el: HTMLElement): boolean {
+    return Math.floor(this.getItemHeight(el) - this.getTopCut(scrollTop, el) - this.getBottomCut(scrollTop, el)) > 0;
   }
 
-  private isItemVisible(elementId: string, scrollTop: number): boolean {
-    return Math.floor(this.getItemHeight(elementId) - this.getTopCut(elementId, scrollTop) - this.getBottomCut(elementId, scrollTop)) > 0;
-  }
-
-  private getItemVisibilityPercent(elementId: string, scrollTop: number): number {
+  private getItemVisibilityPercent(scrollTop: number, el: HTMLElement): number {
     return Math.floor(100 *
-      (this.getItemHeight(elementId) - this.getTopCut(elementId, scrollTop)
-       - this.getBottomCut(elementId, scrollTop)) / this.getItemHeight(elementId));
+      (this.getItemHeight(el) - this.getTopCut(scrollTop, el)
+       - this.getBottomCut(scrollTop, el)) / this.getItemHeight(el));
   }
 
-  private getTopCut(elementId: string, scrollTop: number) {
-    const itemHeight = this.getItemHeight(elementId);
-    let topCut = scrollTop - this.getItemOffsetTop(elementId);
+  private getTopCut(scrollTop: number, el: HTMLElement) {
+    const itemHeight = this.getItemHeight(el);
+    let topCut = scrollTop - this.getItemOffsetTop(el);
     if (topCut < 0)
       topCut = 0;
     if (topCut > itemHeight)
@@ -85,9 +81,9 @@ export class ScrollObserverService {
     return topCut;
   }
 
-  private getBottomCut(elementId: string, scrollTop: number) {
-    const itemHeight = this.getItemHeight(elementId);
-    let bottomCut = (this.getItemOffsetTop(elementId) + itemHeight) - (scrollTop + this.getViewportHeight());
+  private getBottomCut(scrollTop: number, el: HTMLElement) {
+    const itemHeight = this.getItemHeight(el);
+    let bottomCut = (this.getItemOffsetTop(el) + itemHeight) - (scrollTop + this.getViewportHeight());
     if (bottomCut < 0)
       bottomCut = 0;
     if (bottomCut > itemHeight)
