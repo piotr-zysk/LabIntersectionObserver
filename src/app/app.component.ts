@@ -16,6 +16,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   percentageFromIntersectionObserver = 0;
 
   scrollSubscription: Subscription;
+  scrollSubscriptionVerbose: Subscription;
 
   @ViewChild('scrollObserver') scrollObserver: ScrollObserverComponent;
 
@@ -31,6 +32,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.scrollSubscription?.unsubscribe();
+    this.scrollSubscriptionVerbose?.unsubscribe();
   }
 
   private connectIntersectionObserver() {
@@ -48,6 +50,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.scrollSubscription = this.scrollObserverService.visible$('observed').subscribe(
       visible => {
         this.observedItemVisibility = visible ? 'visible' : 'hidden';
+      });
+
+    this.scrollSubscriptionVerbose = this.scrollObserverService.scrollIntersection$('lorem1').subscribe(
+      data => {
+        console.log(data);
       });
   }
 }

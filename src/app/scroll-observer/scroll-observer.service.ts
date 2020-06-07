@@ -1,6 +1,7 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { fromEvent, pipe } from 'rxjs';
 import { map, distinctUntilChanged } from 'rxjs/operators';
+import { ScrollIntersectionVM } from './model/scroll-intersection-VM';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,25 @@ export class ScrollObserverService {
   }
 
   scrollIntersection$(elementId: string) {
-    return this.scroll$();
+    return this.scroll$().pipe(
+      map(scrollTop => this.calculateScrollIntesectionVM(elementId, scrollTop))
+    );
+  }
+
+  private calculateScrollIntesectionVM(elementId: string, scrollTop: number): ScrollIntersectionVM {
+    const itemHeight = this.getItemHeight(elementId);
+    const itemVisibilityPercent = this.getItemVisibilityPercent(elementId, scrollTop);
+    return {
+      scrollTopPercent: scrollTop,
+      topCutPercent: Math.floor(100 * this.getTopCut(elementId, scrollTop) / itemHeight),
+      bottomCutPercent: Math.floor(100 * this.getBottomCut(elementId, scrollTop) / itemHeight),
+      visibilityPercent: itemVisibilityPercent,
+      visible: itemVisibilityPercent > 0,
+      fullyVisible: itemVisibilityPercent === 100,
+      elementHeightPx: itemHeight,
+      elementOffsetPx: this.getItemOffsetTop(elementId),
+      elementViewportOffsetPx: this.getViewportHeight()
+    } as ScrollIntersectionVM;
   }
 
   private notifyWhenShowOrHide = (elementId: string) => pipe(
@@ -30,27 +49,27 @@ export class ScrollObserverService {
     distinctUntilChanged()
   )
 
-  getItemOffsetTop(elementId: string): number {
+  private getItemOffsetTop(elementId: string): number {
     return this.getElementById(elementId).offsetTop;
   }
 
-  getItemHeight(elementId: string): number {
+  private getItemHeight(elementId: string): number {
     return this.getElementById(elementId).offsetHeight;
   }
 
-  getViewportHeight(): number {
+  private getViewportHeight(): number {
     return document.documentElement.clientHeight;
   }
 
   private getElementById(elementId: string): HTMLElement {
-    return document.getElementById('observed');
+    return document.getElementById(elementId);
   }
 
   private isItemVisible(elementId: string, scrollTop: number): boolean {
     return Math.floor(this.getItemHeight(elementId) - this.getTopCut(elementId, scrollTop) - this.getBottomCut(elementId, scrollTop)) > 0;
   }
 
-  private getItemVisibilityPercentage(elementId: string, scrollTop: number): number {
+  private getItemVisibilityPercent(elementId: string, scrollTop: number): number {
     return Math.floor(100 *
       (this.getItemHeight(elementId) - this.getTopCut(elementId, scrollTop)
        - this.getBottomCut(elementId, scrollTop)) / this.getItemHeight(elementId));
@@ -75,5 +94,4 @@ export class ScrollObserverService {
       bottomCut = itemHeight;
     return bottomCut;
   }
-
 }
