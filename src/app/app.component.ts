@@ -3,6 +3,7 @@ import { ScrollObserverComponent } from './scroll-observer/scroll-observer.compo
 import { Subscription, pipe, OperatorFunction, Observable } from 'rxjs';
 import { map, distinctUntilChanged } from 'rxjs/operators';
 import { ScrollObserverService } from './scroll-observer/scroll-observer.service';
+import { ScrollIntersectionVM } from './scroll-observer/model/scroll-intersection-VM';
 
 @Component({
   selector: 'app-root',
@@ -27,12 +28,20 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.connectScrollObserver();
+    // this.connectScrollObserver();
   }
 
   ngOnDestroy() {
-    this.scrollSubscription?.unsubscribe();
-    this.scrollSubscriptionVerbose?.unsubscribe();
+    // this.scrollSubscription?.unsubscribe();
+    // this.scrollSubscriptionVerbose?.unsubscribe();
+  }
+
+  onScroll(itemVisible: boolean) {
+    this.observedItemVisibility = itemVisible ? 'visible' : 'hidden';
+  }
+
+  onScrollVerbose(event: ScrollIntersectionVM) {
+    console.log(event);
   }
 
   private connectIntersectionObserver() {
@@ -47,14 +56,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private connectScrollObserver() {
-    this.scrollSubscription = this.scrollObserverService.visible$(document.getElementById('observed')).subscribe(
-      visible => {
-        this.observedItemVisibility = visible ? 'visible' : 'hidden';
-      });
+    // this.scrollSubscription = this.scrollObserverService.visible$(document.getElementById('observed')).subscribe(
+    //   visible => {
+    //     this.observedItemVisibility = visible ? 'visible' : 'hidden';
+    //   });
 
-    this.scrollSubscriptionVerbose = this.scrollObserverService.scrollIntersection$(document.getElementById('lorem1')).subscribe(
-      data => {
-        console.log(data);
-      });
+    // this.scrollSubscriptionVerbose = this.scrollObserverService.scrollIntersection$(document.getElementById('lorem1')).subscribe(
+    //   data => {
+    //     console.log(data);
+    //   });
   }
 }
