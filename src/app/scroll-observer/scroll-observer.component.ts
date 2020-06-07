@@ -3,7 +3,7 @@ import { Subscription, fromEvent } from 'rxjs';
 import { ScrollObserverService } from './scroll-observer.service';
 
 @Component({
-  selector: 'app-scroll-observer',
+  selector: 'pz-scroll-observer',
   templateUrl: './scroll-observer.component.html'
 })
 export class ScrollObserverComponent implements OnInit, OnDestroy {
