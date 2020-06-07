@@ -6,7 +6,7 @@ import { ScrollObserverService } from './scroll-observer/scroll-observer.service
 import { ScrollIntersectionVM } from './scroll-observer/model/scroll-intersection-VM';
 
 @Component({
-  selector: 'app-root',
+  selector: 'pz-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
