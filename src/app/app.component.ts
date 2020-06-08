@@ -26,8 +26,16 @@ export class AppComponent implements OnInit {
     this.observedItemVisibility = itemVisible ? 'visible' : 'hidden';
   }
 
+  onIntersection(itemVisible: boolean) {
+    console.log(itemVisible);
+  }
+
   onScrollVerbose(event: ScrollIntersectionVM) {
-    console.log(event);
+    // console.log(event);
+  }
+
+  onIntersectionChange(visible: boolean) {
+    console.log(visible);
   }
 
   private connectIntersectionObserver() {

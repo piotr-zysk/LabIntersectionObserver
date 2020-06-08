@@ -17,7 +17,12 @@
     ],
     "paths": {
       "pz-scroll-observer": [
-        "dist/pz-scroll-observer","dist/pz-scroll-observer/pz-scroll-observer"
+        "dist/pz-scroll-observer",
+        "dist/pz-scroll-observer/pz-scroll-observer"
+      ],
+      "pz-intersection-observer": [
+        "dist/pz-intersection-observer/pz-intersection-observer",
+        "dist/pz-intersection-observer"
       ]
     }
   },
