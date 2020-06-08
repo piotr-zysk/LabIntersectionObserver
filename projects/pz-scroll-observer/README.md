@@ -1,7 +1,31 @@
 # PzScrollObserver
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.9.
+Easy way to observe vertical scroll position and visibility of particular DOM element.
 
+## Installation
+
+```
+npm install pz-scroll-observer
+```
+
+then add import in your module
+
+```
+import { PzScrollObserverModule } from 'pz-scroll-observer';
+
+...
+
+imports [
+  PzScrollObserver,
+...
+]
+```
+
+## Component to show current scroll position
+
+```
+<pz-scroll-observer></pz-scroll-observer>
+```
 
 ## Directives to observe visibility od particular DOM element, based on scroll position
 
