@@ -10,6 +10,6 @@
   },
   "author": "Piotr Zyśk, pizy123@gmail.com",
   "license": "ISC",
-  "homepage": "https://github.com/piotr-zysk/LabIntersectionObserver/tree/pzScrollObserverLibrary/projects/pz-scroll-observer",
-  "keywords": ["scroll", "scrollobserver", "intersection", "intersectionobserver"]
+  "homepage": "https://github.com/piotr-zysk/LabIntersectionObserver/tree/pzIntersectionObserverLibrary/projects/pz-scroll-observer",
+  "keywords": ["scroll", "scrollobserver"]
 }
