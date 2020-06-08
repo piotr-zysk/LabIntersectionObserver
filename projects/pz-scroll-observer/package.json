@@ -9,5 +9,7 @@
     "tslib": "^1.10.0"
   },
   "author": "Piotr Zyśk, pizy123@gmail.com",
-  "license": "ISC"
+  "license": "ISC",
+  "homepage": "https://github.com/piotr-zysk/LabIntersectionObserver/tree/pzScrollObserverLibrary/projects/pz-scroll-observer",
+  "keywords": ["scroll", "scrollobserver", "intersection", "intersectionobserver"]
 }

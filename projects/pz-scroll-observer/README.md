@@ -2,6 +2,8 @@
 
 Easy way to observe vertical scroll position and visibility of particular DOM element.
 
+Compatible with all popular browsers. (Polyfill not required.)
+
 ## Installation
 
 ```
