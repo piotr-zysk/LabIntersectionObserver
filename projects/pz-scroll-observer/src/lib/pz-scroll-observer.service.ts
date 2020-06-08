@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { fromEvent, pipe } from 'rxjs';
+import { fromEvent, pipe, concat, of } from 'rxjs';
 import { map, distinctUntilChanged } from 'rxjs/operators';
 import { ScrollIntersectionVM } from './model/scroll-intersection-VM';
 
@@ -11,9 +11,11 @@ export class PzScrollObserverService {
   constructor() { }
 
   scroll$() {
-    return fromEvent(document, 'scroll').pipe(
-      map(() => document.documentElement.scrollTop)
-    );
+    return concat(
+      of(document.documentElement.scrollTop),
+      fromEvent(document, 'scroll').pipe(
+        map(() => document.documentElement.scrollTop)
+    ));
   }
 
   visible$(el: HTMLElement) {
