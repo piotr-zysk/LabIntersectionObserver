@@ -32,7 +32,7 @@ export class PzScrollObserverService {
     const itemHeight = this.getItemHeight(el);
     const itemVisibilityPercent = this.getItemVisibilityPercent(scrollTop, el);
     return {
-      scrollTopPercent: scrollTop,
+      scrollTop,
       topCutPercent: Math.floor(100 * this.getTopCut(scrollTop, el) / itemHeight),
       bottomCutPercent: Math.floor(100 * this.getBottomCut(scrollTop, el) / itemHeight),
       visibilityPercent: itemVisibilityPercent,
