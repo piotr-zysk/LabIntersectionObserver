@@ -1,6 +1,6 @@
 # PzScrollObserver
 
-Easy way to observe vertical scroll position and visibility of particular DOM element.
+Easy way to observe vertical scroll position and changes in visibility of particular DOM element due to page scroll.
 
 Compatible with all popular browsers. (Polyfill not required.)
 

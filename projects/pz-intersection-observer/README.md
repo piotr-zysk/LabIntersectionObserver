@@ -1,24 +1,70 @@
 # PzIntersectionObserver
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.9.
+Easy way to observe HTML element visibility, based on scrolling, resizing, changes in DOM.
+Emits true when observed element starts to be visible and emits false when the element hides.
 
-## Code scaffolding
+Polyfill included for compatibility with all browsers.
 
-Run `ng generate component component-name --project pz-intersection-observer` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project pz-intersection-observer`.
-> Note: Don't forget to add `--project pz-intersection-observer` or else it will be added to the default project in your `angular.json` file. 
+## Installation
 
-## Build
+```
+npm install pz-intersection-observer
+```
 
-Run `ng build pz-intersection-observer` to build the project. The build artifacts will be stored in the `dist/` directory.
+then add import in your module
 
-## Publishing
+```
+import { PzIntersectionObserverModule } from 'pz-intersection-observer';
 
-After building your library with `ng build pz-intersection-observer`, go to the dist folder `cd dist/pz-intersection-observer` and run `npm publish`.
+...
 
-## Running unit tests
+imports [
+  PzIntersectionObserver,
+...
+]
+```
 
-Run `ng test pz-intersection-observer` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Directive
 
-## Further help
+basic usage
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+```
+<div pzIntersection (visibilityChange)='onIntersectionChange($event)'>
+```
+
+with some additional parameters
+
+```
+<div pzIntersection (visibilityChange)='onIntersectionChange($event) stopWhenVisible='true' intersectionRootMargin='20px'>
+```
+
+optional parameters
+
+  @Input() intersectionRootMargin = '0px';  // margin around observed element to be included in intersection calculation
+  @Input() intersectionRoot: HTMLElement;
+  @Input() intersectionThreshold: number | number[] = 0;  // treshold: If 0, any partial visibility will return true. If 1, only 100% of visibility will return true.
+  @Input() stopWhenVisible = false;  // emit 'true' event only once (stop observing once the element gets visible)
+
+
+## Service
+
+PzIntersectionObserverService provides one observable:
+
+  fromIntersectionObserver$(
+      element: HTMLElement,
+      config: IntersectionObserverInit,
+      stopWhenVisible = false
+    )
+
+  example of config object:
+
+    {
+        root: document.querySelector('#scrollArea'),
+        rootMargin: '0px',
+        threshold: 1.0
+    }
+
+
+
+
+

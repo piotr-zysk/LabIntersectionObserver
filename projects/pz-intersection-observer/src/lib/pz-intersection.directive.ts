@@ -7,7 +7,6 @@ import { PzIntersectionObserverService } from './pz-intersection-observer.servic
   selector: '[pzIntersection]'
 })
 export class PzIntersectionDirective implements OnInit, OnDestroy {
-  @Input() intersectionDebounce = 0;
   @Input() intersectionRootMargin = '0px';
   @Input() intersectionRoot: HTMLElement;
   @Input() intersectionThreshold: number | number[];
