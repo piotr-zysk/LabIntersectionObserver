@@ -23,18 +23,13 @@ export class PzIntersectionObserverService {
         const intersectionObserver = new IntersectionObserver(
           (entries, observer) => {
             entries.forEach(entry => {
-              subject$.next({ entry, observer });
+              subscriber.next(entry.isIntersecting);
+              if (stopWhenVisible && entry.isIntersecting)
+                observer.unobserve(entry.target);
             });
           },
           config
         );
-
-        subject$.subscribe(
-          ({entry, observer}) => {
-            subscriber.next(entry.isIntersecting);
-            if (stopWhenVisible && entry.isIntersecting)
-              observer.unobserve(entry.target);
-          });
 
         intersectionObserver.observe(element);
 
