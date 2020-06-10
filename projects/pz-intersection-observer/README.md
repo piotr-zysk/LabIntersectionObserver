@@ -9,6 +9,7 @@ Polyfill included for compatibility with all browsers.
 
 ```
 npm install pz-intersection-observer
+npm install intersection-observer
 ```
 
 then add import in your module
