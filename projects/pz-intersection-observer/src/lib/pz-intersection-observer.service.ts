@@ -15,10 +15,6 @@ export class PzIntersectionObserverService {
       stopWhenVisible = false
     ) {
       return new Observable<boolean>(subscriber => {
-        const subject$ = new Subject<{
-          entry: IntersectionObserverEntry;
-          observer: IntersectionObserver;
-        }>();
 
         const intersectionObserver = new IntersectionObserver(
           (entries, observer) => {
@@ -36,7 +32,6 @@ export class PzIntersectionObserverService {
         return {
           unsubscribe() {
             intersectionObserver.disconnect();
-            subject$.unsubscribe();
           }
         };
       });
