@@ -1,5 +1,5 @@
 export class ScrollIntersectionVM {
-    scrollTop: number;
+    scrollY: number;
     topCutPercent: number;
     bottomCutPercent: number;
     visibilityPercent: number;

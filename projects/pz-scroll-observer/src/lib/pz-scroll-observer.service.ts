@@ -12,9 +12,9 @@ export class PzScrollObserverService {
 
   scroll$() {
     return concat(
-      of(document.documentElement.scrollTop),
+      of(this.getScrollY()),
       fromEvent(document, 'scroll').pipe(
-        map(() => document.documentElement.scrollTop)
+        map(() => this.getScrollY())
     ));
   }
 
@@ -26,17 +26,21 @@ export class PzScrollObserverService {
 
   scrollIntersection$(el: HTMLElement) {
     return this.scroll$().pipe(
-      map(scrollTop => this.calculateScrollIntesectionVM(scrollTop, el))
+      map(scrollY => this.calculateScrollIntesectionVM(scrollY, el))
     );
   }
 
-  private calculateScrollIntesectionVM(scrollTop: number, el: HTMLElement): ScrollIntersectionVM {
+  private getScrollY() {
+    return window.scrollY || document.documentElement?.scrollTop || document.body.scrollTop;
+  }
+
+  private calculateScrollIntesectionVM(scrollY: number, el: HTMLElement): ScrollIntersectionVM {
     const itemHeight = this.getItemHeight(el);
-    const itemVisibilityPercent = this.getItemVisibilityPercent(scrollTop, el);
+    const itemVisibilityPercent = this.getItemVisibilityPercent(scrollY, el);
     return {
-      scrollTop,
-      topCutPercent: Math.floor(100 * this.getTopCut(scrollTop, el) / itemHeight),
-      bottomCutPercent: Math.floor(100 * this.getBottomCut(scrollTop, el) / itemHeight),
+      scrollY,
+      topCutPercent: Math.floor(100 * this.getTopCut(scrollY, el) / itemHeight),
+      bottomCutPercent: Math.floor(100 * this.getBottomCut(scrollY, el) / itemHeight),
       visibilityPercent: itemVisibilityPercent,
       visible: itemVisibilityPercent > 0,
       fullyVisible: itemVisibilityPercent === 100,
@@ -63,19 +67,19 @@ export class PzScrollObserverService {
     return document.documentElement.clientHeight;
   }
 
-  private isItemVisible(scrollTop: number, el: HTMLElement): boolean {
-    return Math.floor(this.getItemHeight(el) - this.getTopCut(scrollTop, el) - this.getBottomCut(scrollTop, el)) > 0;
+  private isItemVisible(scrollY: number, el: HTMLElement): boolean {
+    return Math.floor(this.getItemHeight(el) - this.getTopCut(scrollY, el) - this.getBottomCut(scrollY, el)) > 0;
   }
 
-  private getItemVisibilityPercent(scrollTop: number, el: HTMLElement): number {
+  private getItemVisibilityPercent(scrollY: number, el: HTMLElement): number {
     return Math.floor(100 *
-      (this.getItemHeight(el) - this.getTopCut(scrollTop, el)
-       - this.getBottomCut(scrollTop, el)) / this.getItemHeight(el));
+      (this.getItemHeight(el) - this.getTopCut(scrollY, el)
+       - this.getBottomCut(scrollY, el)) / this.getItemHeight(el));
   }
 
-  private getTopCut(scrollTop: number, el: HTMLElement) {
+  private getTopCut(scrollY: number, el: HTMLElement) {
     const itemHeight = this.getItemHeight(el);
-    let topCut = scrollTop - this.getItemOffsetTop(el);
+    let topCut = scrollY - this.getItemOffsetTop(el);
     if (topCut < 0)
       topCut = 0;
     if (topCut > itemHeight)
@@ -83,9 +87,9 @@ export class PzScrollObserverService {
     return topCut;
   }
 
-  private getBottomCut(scrollTop: number, el: HTMLElement) {
+  private getBottomCut(scrollY: number, el: HTMLElement) {
     const itemHeight = this.getItemHeight(el);
-    let bottomCut = (this.getItemOffsetTop(el) + itemHeight) - (scrollTop + this.getViewportHeight());
+    let bottomCut = (this.getItemOffsetTop(el) + itemHeight) - (scrollY + this.getViewportHeight());
     if (bottomCut < 0)
       bottomCut = 0;
     if (bottomCut > itemHeight)

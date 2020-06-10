@@ -54,7 +54,7 @@ imports [
 
 ```
 class ScrollIntersectionVM {
-    scrollTop: number;  // scroll position
+    scrollY: number;  // scroll position
     topCutPercent: number;  // how many percent of top part of element is hidden
     bottomCutPercent: number;  // how many percent of bottom part of element is hidden
     visibilityPercent: number;   // how many percent of element is visible in total
