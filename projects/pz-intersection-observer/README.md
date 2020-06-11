@@ -46,16 +46,24 @@ optional parameters
   @Input() intersectionThreshold: number | number[] = 0;  // treshold: If 0, any partial visibility will return true. If 1, only 100% of visibility will return true.
   @Input() stopWhenVisible = false;  // emit 'true' event only once (stop observing once the element gets visible)
 
+When multiple elements are observer with the same set of optional parameters, all of them use the same observer for resource otimization reason.
+
 
 ## Service
 
-PzIntersectionObserverService provides one observable:
+PzIntersectionObserverService provides 2 observables:
 
   fromIntersectionObserver$(
       element: HTMLElement,
       config: IntersectionObserverInit,
       stopWhenVisible = false
     )
+
+  fromIntersectionObserverShare$(
+    element: HTMLElement,
+    config: IntersectionObserverInit,
+    stopWhenVisible = false
+  ) = fromIntersectionObserver(element, config, stopWhenVisible).pipe(share())
 
   example of config object:
 
@@ -64,6 +72,8 @@ PzIntersectionObserverService provides one observable:
         rootMargin: '0px',
         threshold: 1.0
     }
+
+  Observables emit [IntersectionObserverEntry](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry) events
 
 
 
