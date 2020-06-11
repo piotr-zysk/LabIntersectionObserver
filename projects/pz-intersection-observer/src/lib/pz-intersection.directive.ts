@@ -40,7 +40,9 @@ export class PzIntersectionDirective implements OnInit, OnDestroy {
     intersectionSubscription.subscription.unsubscribe();
 
     if (intersectionSubscription.elements.length > 1) {
-      intersectionSubscription.elements = intersectionSubscription.elements.filter(el => el !== this.el.nativeElement);
+      const el = this.el.nativeElement;
+      this.intersectionObserverService.elementObservers.find(o => o.element === el).observer.unobserve(el);
+      intersectionSubscription.elements = intersectionSubscription.elements.filter(e => e !== el);
     }
     else {
       this.intersectionObserverService.intersectionSubscriptions = this.intersectionObserverService.intersectionSubscriptions
