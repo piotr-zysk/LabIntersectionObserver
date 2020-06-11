@@ -40,11 +40,15 @@ with some additional parameters
 ```
 
 optional parameters
-
+```
   @Input() intersectionRootMargin = '0px';  // margin around observed element to be included in intersection calculation
+
   @Input() intersectionRoot: HTMLElement;
+
   @Input() intersectionThreshold: number | number[] = 0;  // treshold: If 0, any partial visibility will return true. If 1, only 100% of visibility will return true.
+
   @Input() stopWhenVisible = false;  // emit 'true' event only once (stop observing once the element gets visible)
+```
 
 When multiple elements are observer with the same set of optional parameters, all of them use the same observer for resource otimization reason.
 
