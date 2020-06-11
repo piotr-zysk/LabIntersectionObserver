@@ -1,9 +1,8 @@
 import { Directive, ElementRef, EventEmitter, Input, OnInit, OnDestroy, Output } from '@angular/core';
 import { Subject, Subscription, Observable } from 'rxjs';
-import { share, filter, tap } from 'rxjs/operators';
+import { filter, tap, throttleTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { PzIntersectionObserverService } from './pz-intersection-observer.service';
 import { PzIntersectionObserverSubscriptionVM } from './model/pz-intersection-observer-subscription-VM';
-import { element } from 'protractor';
 
 @Directive({
   selector: '[pzIntersection]'
@@ -13,6 +12,7 @@ export class PzIntersectionDirective implements OnInit, OnDestroy {
   @Input() intersectionRoot: HTMLElement = null;
   @Input() intersectionThreshold: number | number[] = 0;
   @Input() stopWhenVisible = false;
+  @Input() throttleTime = 0;
 
   @Output() visibilityChange = new EventEmitter<boolean>();
 
@@ -89,7 +89,10 @@ export class PzIntersectionDirective implements OnInit, OnDestroy {
   private subscribe(observable$: Observable<IntersectionObserverEntry>, element: HTMLElement): Subscription {
     return observable$.pipe(
       filter(entry => entry.target === element),
-      tap(entry => this.visibilityChange.emit(entry.isIntersecting))
+      throttleTime(this.throttleTime, undefined, { leading: true, trailing: true }),
+      map(entry => entry.isIntersecting),
+      distinctUntilChanged(),
+      tap(isIntersecting => this.visibilityChange.emit(isIntersecting)),
       ).subscribe();
   }
 

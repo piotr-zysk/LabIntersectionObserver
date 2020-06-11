@@ -48,9 +48,11 @@ optional parameters
   @Input() intersectionThreshold: number | number[] = 0;  // treshold: If 0, any partial visibility will return true. If 1, only 100% of visibility will return true.
 
   @Input() stopWhenVisible = false;  // emit 'true' event only once (stop observing once the element gets visible)
+
+  @Input() throttleTime = 0;  // keep the interval between events to be at least X miliseconds
 ```
 
-When multiple elements are observer with the same set of optional parameters, all of them use the same observer for resource otimization reason.
+When multiple elements are observer with the same set of all optional parameters except 'throttleTime', all of them use the same observer for resource otimization reason.
 
 
 ## Service
