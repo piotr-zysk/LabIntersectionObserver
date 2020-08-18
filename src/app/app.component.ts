@@ -16,10 +16,13 @@ export class AppComponent implements OnInit {
   scrollSubscription: Subscription;
   scrollSubscriptionVerbose: Subscription;
 
+  x = 'blabla frfi fri frjfrifj rifjef efrkfjeklfj erkfler frlf erfjrkfjerlfk erferk fjerklfjerklf erlf rkfj rfjerlf rfkjrfkjrelfe rfjerflkerjfrkefj erlkfj rekfjerlkfj';
+
   constructor() { }
 
   ngOnInit() {
     this.connectIntersectionObserver();
+    setTimeout(() => this.x += this.x, 2000);
   }
 
   onScroll(itemVisible: boolean) {
@@ -36,6 +39,10 @@ export class AppComponent implements OnInit {
 
   onIntersectionChange(visible: boolean) {
     console.log(visible);
+  }
+
+  onResize(event: ResizeObserverEntry) {
+    console.log(event);
   }
 
   private connectIntersectionObserver() {

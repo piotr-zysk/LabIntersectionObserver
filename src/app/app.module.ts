@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { PzScrollObserverModule } from 'pz-scroll-observer';
 import { PzIntersectionObserverModule } from 'projects/pz-intersection-observer/src/public-api';
+import { PzResizeObserverModule } from 'projects/pz-resize-observer/src/public-api';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { PzIntersectionObserverModule } from 'projects/pz-intersection-observer/
   imports: [
     BrowserModule,
     PzScrollObserverModule,
-    PzIntersectionObserverModule
+    PzIntersectionObserverModule,
+    PzResizeObserverModule
   ],
   providers: [],
   bootstrap: [AppComponent]
