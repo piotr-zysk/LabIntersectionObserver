@@ -199,6 +199,46 @@
           }
         }
       }
+    },
+    "pz-resize-observer": {
+      "projectType": "library",
+      "root": "projects/pz-resize-observer",
+      "sourceRoot": "projects/pz-resize-observer/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/pz-resize-observer/tsconfig.lib.json",
+            "project": "projects/pz-resize-observer/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/pz-resize-observer/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/pz-resize-observer/src/test.ts",
+            "tsConfig": "projects/pz-resize-observer/tsconfig.spec.json",
+            "karmaConfig": "projects/pz-resize-observer/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/pz-resize-observer/tsconfig.lib.json",
+              "projects/pz-resize-observer/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }},
   "defaultProject": "LabIntersectionObserver"
 }

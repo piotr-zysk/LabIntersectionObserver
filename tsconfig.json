@@ -23,6 +23,10 @@
       "pz-intersection-observer": [
         "dist/pz-intersection-observer/pz-intersection-observer",
         "dist/pz-intersection-observer"
+      ],
+      "pz-resize-observer": [
+        "dist/pz-resize-observer/pz-resize-observer",
+        "dist/pz-resize-observer"
       ]
     }
   },
